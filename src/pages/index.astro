@@ -1,0 +1,54 @@
+---
+// src/pages/index.astro — WattLogic Homepage
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Calculator from '../components/Calculator.astro';
+---
+
+<BaseLayout
+  title="WattLogic: Calculadora Solar ROI & Energía Inteligente"
+  description="Calculadora gratuita de paneles solares. Estima al instante paneles necesarios, ahorro anual y periodo de retorno. Sin registros. Funciona para España, Latinoamérica, USA y Europa."
+>
+
+  <!-- Hero Section -->
+  <section class="hero" aria-labelledby="hero-heading">
+    <div class="container hero-inner">
+      <div class="hero-badge" data-i18n="hero-badge">
+        <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        Herramienta Inteligente Gratuita
+      </div>
+
+      <h1 id="hero-heading" data-i18n="hero-title">
+        WattLogic: Energía Inteligente<br />
+        <span class="hero-accent">&amp; Calculadora ROI</span>
+      </h1>
+
+      <p class="hero-sub" data-i18n="hero-sub">
+        Dimensiona tu sistema fotovoltaico al instante. Ingresa tu consumo mensual, selecciona tu ciudad y obtén un cálculo preciso de paneles, ahorro anual y periodo de retorno — sin registros.
+      </p>
+
+      <div class="hero-trust">
+        <span data-i18n="trust-no-reg">✓ Sin registro</span>
+        <span data-i18n="trust-pdf">✓ Reporte PDF instantáneo</span>
+        <span data-i18n="trust-lang">✓ Soporte EN / ES</span>
+        <span data-i18n="trust-projection">✓ Proyección a 20 años</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Calculator Engine -->
+  <div class="container section-pad">
+    <Calculator />
+  </div>
+
+  <!-- SEO Content Block -->
+  <section class="seo-block container" aria-label="Sobre el dimensionamiento solar">
+    <h2 data-i18n="seo-title">Cómo funciona el dimensionamiento solar</h2>
+    <p data-i18n="seo-p1">
+      La fórmula de dimensionamiento fotovoltaico utilizada por WattLogic tiene en cuenta tus <strong>Horas de Sol Pico (HSP)</strong> —el equivalente diario de la irradiancia solar completa en tu región— multiplicado por un <strong>factor de rendimiento de 0.77</strong> para reflejar las pérdidas del mundo real por resistencia del cableado, ineficiencia del inversor (~96%) y suciedad en los paneles. Esta metodología estándar de la industria asegura que tu estimación sea conservadora y confiable.
+    </p>
+    <p data-i18n="seo-p2">
+      El <strong>periodo de retorno (ROI)</strong> divide el costo total de tu sistema por el ahorro de energía anual, calculado a partir de tu tarifa eléctrica local y la producción anual del sistema. Un sistema residencial típico en un clima soleado se amortiza en 6 a 10 años, generando luego energía gratuita durante 15 a 20 años adicionales.
+    </p>
+  </section>
+
+</BaseLayout>

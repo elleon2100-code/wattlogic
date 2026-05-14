@@ -1,0 +1,256 @@
+---
+// BaseLayout.astro — WattLogic shared layout
+import '../styles/global.css';
+
+export interface Props {
+  title?: string;
+  description?: string;
+  lang?: 'en' | 'es';
+  ogImage?: string;
+}
+
+const {
+  title = 'WattLogic: Smart Energy & Solar ROI Calculator',
+  description = 'Free solar panel calculator. Instantly estimate how many panels you need, your annual savings, and payback period — no registration required.',
+  lang = 'es',
+  ogImage = '/og-wattlogic.jpg',
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://wattlogic.io').href;
+---
+
+<!DOCTYPE html>
+<html lang={lang}>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <!-- ── Primary SEO ─────────────────────────────────────── -->
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <meta name="robots" content="index, follow" />
+
+  <!-- ── Open Graph ──────────────────────────────────────── -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content={canonical} />
+  <meta property="og:title"       content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image"       content={ogImage} />
+  <meta property="og:site_name"   content="WattLogic" />
+
+  <!-- ── Twitter Card ────────────────────────────────────── -->
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:title"       content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image"       content={ogImage} />
+
+  <!-- ── Hreflang (i18n) ─────────────────────────────────── -->
+  <link rel="alternate" hreflang="en" href="https://wattlogic.io/en/" />
+  <link rel="alternate" hreflang="es" href="https://wattlogic.io/es/" />
+  <link rel="alternate" hreflang="x-default" href="https://wattlogic.io/" />
+
+  <!-- ── Structured Data (JSON-LD) ───────────────────────── -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "WattLogic Solar ROI Calculator",
+    "url": "https://wattlogic.io",
+    "description": description,
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "author": { "@type": "Organization", "name": "WattLogic" }
+  })} />
+
+  <!-- ── Favicon ─────────────────────────────────────────── -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+  <!-- ── Fonts ───────────────────────────────────────────── -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- ── AdSense ─────────────────────────────────────────── -->
+  <!-- ADSENSE_SCRIPT_TAG: Replace ca-pub-XXXXXXXXXXXXXXXX with your publisher ID -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+
+  <!-- ── Chart.js & jsPDF (loaded once here) ─────────────── -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
+</head>
+
+<body class="bg-neutral-50 text-neutral-900 dark:bg-neutral-950 dark:text-neutral-100">
+
+  <!-- ── Navigation ──────────────────────────────────────── -->
+  <header class="wl-nav">
+    <div class="container">
+      <a href="/" class="wl-logo" aria-label="WattLogic Home">
+        <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        <span>WattLogic</span>
+      </a>
+
+      <nav aria-label="Main navigation">
+        <a href="/" class="nav-link" data-i18n="nav-calc">Calculator</a>
+        <a href="/wiki/inverters" class="nav-link" data-i18n="nav-inverters">Inverters</a>
+        <a href="/wiki/batteries" class="nav-link" data-i18n="nav-batteries">Batteries</a>
+        <a href="/wiki/smart-home" class="nav-link" data-i18n="nav-smart">Smart Home</a>
+      </nav>
+
+      <!-- Language switcher -->
+      <div class="lang-switcher" role="group" aria-label="Language selector">
+        <button
+          class="lang-btn"
+          data-lang="en"
+          onclick="wlSetLang('en')"
+        >EN</button>
+        <button
+          class="lang-btn"
+          data-lang="es"
+          onclick="wlSetLang('es')"
+        >ES</button>
+      </div>
+    </div>
+
+    <!-- ADSENSE_AD_UNIT: BELOW_NAV -->
+    <div class="ad-unit below-nav">
+      <!-- ADSENSE_AD_UNIT: BELOW_NAV -->
+      <!--
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="XXXXXXXXXX"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      -->
+    </div>
+  </header>
+
+  <!-- ── Main Content ────────────────────────────────────── -->
+  <main id="main-content">
+    <slot />
+  </main>
+
+  <!-- ── Footer ──────────────────────────────────────────── -->
+  <footer class="wl-footer">
+    <div class="container">
+      <p class="footer-copy">
+        &copy; {new Date().getFullYear()} WattLogic.io —
+        <span data-i18n="footer-copy">Free solar tools, no registration required.</span>
+      </p>
+      <nav aria-label="Footer links" class="footer-links">
+        <a href="/privacy" data-i18n="privacy">Privacy Policy</a>
+        <a href="/cookies" data-i18n="cookies">Cookie Policy</a>
+        <a href="/about" data-i18n="about">About</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script is:inline>
+      es: {
+        'nav-calc': 'Calculadora',
+        'nav-inverters': 'Inversores',
+        'nav-batteries': 'Baterías',
+        'nav-smart': 'Hogar Inteligente',
+        'footer-copy': 'Herramientas solares gratuitas, sin registro.',
+        'privacy': 'Privacidad',
+        'cookies': 'Cookies',
+        'about': 'Acerca de',
+        'hero-badge': 'Herramienta Inteligente Gratuita',
+        'hero-title': 'WattLogic: Energía Inteligente & Calculadora ROI',
+        'hero-sub': 'Dimensiona tu sistema fotovoltaico al instante. Ingresa tu consumo, selecciona tu ciudad y obtén un cálculo preciso de paneles, ahorro anual y periodo de retorno — sin registros.',
+        'trust-no-reg': '✓ Sin registro',
+        'trust-pdf': '✓ Reporte PDF instantáneo',
+        'trust-lang': '✓ Soporte EN / ES',
+        'trust-projection': '✓ Proyección a 20 años',
+        'seo-title': 'Cómo funciona el dimensionamiento solar',
+        'seo-p1': 'La fórmula de dimensionamiento fotovoltaico utilizada por WattLogic tiene en cuenta tus Horas de Sol Pico (HSP) —el equivalente diario de la irradiancia solar completa en tu región— multiplicado por un factor de rendimiento de 0.77 para reflejar las pérdidas del mundo real por resistencia del cableado, ineficiencia del inversor (~96%) y suciedad en los paneles. Esta metodología estándar de la industria asegura que tu estimación sea conservadora y confiable.',
+        'seo-p2': 'El periodo de retorno (ROI) divide el costo total de tu sistema por el ahorro de energía anual, calculado a partir de tu tarifa eléctrica local y la producción anual del sistema. Un sistema residencial típico en un clima soleado se amortiza en 6 a 10 años, generando luego energía gratuita durante 15 a 20 años adicionales.',
+        'label-consumption': 'Consumo Mensual',
+        'label-location': 'Ubicación (HSP)',
+        'label-panel': 'Potencia Panel',
+        'label-cost': 'Costo Energía',
+        'label-investment': 'Inversión Estimada',
+        'res-panels-label': 'Paneles Necesarios',
+        'res-modules': 'módulos',
+        'res-savings-label': 'Ahorro Anual',
+        'res-roi-label': 'Retorno (ROI)',
+        'btn-pdf': 'Descargar Reporte PDF',
+        'chart-title': 'Costo Acumulado (20 Años)',
+        'legend-sin': 'Sin Paneles',
+        'legend-con': 'Con Paneles',
+        'manual-cost': 'Ajustar manualmente'
+      },
+      en: {
+        'nav-calc': 'Calculator',
+        'nav-inverters': 'Inverters',
+        'nav-batteries': 'Batteries',
+        'nav-smart': 'Smart Home',
+        'footer-copy': 'Free solar tools, no registration required.',
+        'privacy': 'Privacy Policy',
+        'cookies': 'Cookie Policy',
+        'about': 'About',
+        'hero-badge': 'Free Solar Intelligence Tool',
+        'hero-title': 'WattLogic: Smart Energy & ROI Calculator',
+        'hero-sub': 'Dimension your photovoltaic system instantly. Enter your monthly consumption, select your city, and get a precise calculation of panels, annual savings, and payback period — no account needed.',
+        'trust-no-reg': '✓ No registration',
+        'trust-pdf': '✓ Instant PDF report',
+        'trust-lang': '✓ EN / ES support',
+        'trust-projection': '✓ 20-year projection',
+        'seo-title': 'How Solar Panel Sizing Works',
+        'seo-p1': 'The photovoltaic sizing formula used by WattLogic accounts for your Peak Sun Hours (HSP) —the daily equivalent of full solar irradiance in your region— multiplied by a performance ratio of 0.77 to reflect real-world losses from wiring resistance, inverter inefficiency (~96%), and panel soiling. This industry-standard methodology ensures your estimate is conservative and reliable.',
+        'seo-p2': 'The payback period (ROI) divides your total system cost by annual energy savings, calculated from your local electricity tariff and the system\'s annual production. A typical residential system in a sunny climate pays back in 6–10 years, then generates free energy for 15–20 additional years.',
+        'label-consumption': 'Monthly Consumption',
+        'label-location': 'Location (HSP)',
+        'label-panel': 'Panel Power',
+        'label-cost': 'Energy Cost',
+        'label-investment': 'Estimated Investment',
+        'res-panels-label': 'Panels Needed',
+        'res-modules': 'modules',
+        'res-savings-label': 'Annual Savings',
+        'res-roi-label': 'Return (ROI)',
+        'btn-pdf': 'Download PDF Report',
+        'chart-title': 'Cumulative Cost (20 Years)',
+        'legend-sin': 'Without Panels',
+        'legend-con': 'With Panels',
+        'manual-cost': 'Adjust manually'
+      }
+    };
+
+    window.wlSetLang = function(lang) {
+      document.documentElement.lang = lang;
+      localStorage.setItem('wl-lang', lang);
+
+      // Update all elements with data-i18n
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (TRANSLATIONS[lang] && TRANSLATIONS[lang][key]) {
+          el.textContent = TRANSLATIONS[lang][key];
+        }
+      });
+
+      // Update language buttons
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        const btnLang = btn.getAttribute('data-lang');
+        const isActive = btnLang === lang;
+        btn.classList.toggle('active', isActive);
+        btn.setAttribute('aria-pressed', isActive.toString());
+      });
+
+      // Dispatch event for other components (like Calculator) to update if needed
+      window.dispatchEvent(new CustomEvent('wl-lang-changed', { detail: lang }));
+    };
+
+    // Auto-detect language
+    (function() {
+      const savedLang = localStorage.getItem('wl-lang');
+      const browserLang = navigator.language.startsWith('es') ? 'es' : 'en';
+      const initialLang = savedLang || browserLang || 'es';
+      window.wlSetLang(initialLang);
+    })();
+  </script>
+
+</body>
+</html>

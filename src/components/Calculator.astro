@@ -1,0 +1,442 @@
+---
+// Calculator.astro — WattLogic Solar ROI Engine
+import hspData from '../data/hsp-cities.json';
+
+const { cities } = hspData;
+
+// Group cities by country for the select menu
+const groupedCities = cities.reduce((acc, city) => {
+  const country = city.country;
+  if (!acc[country]) acc[country] = [];
+  acc[country].push(city);
+  return acc;
+}, {} as Record<string, typeof cities>);
+
+const countryNames: Record<string, string> = {
+  'US': 'Estados Unidos 🇺🇸',
+  'ES': 'España 🇪🇸',
+  'DO': 'República Dominicana 🇩🇴',
+  'MX': 'México 🇲🇽',
+  'DE': 'Alemania 🇩🇪',
+  'AU': 'Australia 🇦🇺',
+  'BR': 'Brasil 🇧🇷',
+  'CO': 'Colombia 🇨🇴',
+  'AR': 'Argentina 🇦🇷',
+  'IT': 'Italia 🇮🇹',
+  'FR': 'Francia 🇫🇷',
+  'PT': 'Portugal 🇵🇹',
+  'SA': 'Arabia Saudita 🇸🇦',
+  'AE': 'EAU 🇦🇪',
+  'IN': 'India 🇮🇳'
+};
+---
+
+<section id="solar-calculator" class="max-w-5xl mx-auto px-4 py-12 font-sans text-slate-800 dark:text-slate-100">
+  <div class="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800">
+    <div class="grid lg:grid-cols-2">
+      
+      <!-- INPUTS PANEL -->
+      <div class="p-8 lg:p-12 bg-slate-50 dark:bg-slate-900/50 border-r border-slate-200 dark:border-slate-800">
+        <header class="mb-10">
+          <h2 class="text-3xl font-bold bg-gradient-to-r from-amber-500 to-orange-600 bg-clip-text text-transparent mb-2" data-i18n="hero-title">
+            Motor Solar ROI
+          </h2>
+          <p class="text-slate-500 dark:text-slate-400" data-i18n="hero-sub">Configure los parámetros de su sistema para calcular el ahorro.</p>
+        </header>
+
+        <div class="space-y-8">
+          <!-- Consumption -->
+          <div class="space-y-4">
+            <div class="flex justify-between items-end">
+              <label for="kwh" class="font-semibold text-sm uppercase tracking-wider text-slate-500" data-i18n="label-consumption">Consumo Mensual</label>
+              <span class="text-2xl font-bold text-amber-600"><span id="kwh-val">400</span> <small class="text-sm font-medium text-slate-400">kWh</small></span>
+            </div>
+            <input type="range" id="kwh" min="50" max="2500" step="10" value="400" 
+              class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-amber-500" />
+          </div>
+
+          <!-- Location -->
+          <div class="space-y-2">
+            <label for="city" class="font-semibold text-sm uppercase tracking-wider text-slate-500 block" data-i18n="label-location">Ubicación (HSP)</label>
+            <select id="city" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-amber-500 outline-none transition-all">
+              {Object.entries(groupedCities).map(([countryCode, countryCities]) => (
+                <optgroup label={countryNames[countryCode] || countryCode}>
+                  {countryCities.map(city => (
+                    <option value={city.hsp} data-currency={city.currency}>{city.name} — {city.hsp} HSP</option>
+                  ))}
+                </optgroup>
+              ))}
+            </select>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <!-- Panel Power -->
+            <div class="space-y-2">
+              <label for="wp" class="font-semibold text-sm uppercase tracking-wider text-slate-500 block" data-i18n="label-panel">Potencia Panel</label>
+              <select id="wp" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-amber-500 outline-none transition-all">
+                <option value="400">400 Wp</option>
+                <option value="450" selected>450 Wp</option>
+                <option value="500">500 Wp</option>
+                <option value="550">550 Wp</option>
+              </select>
+            </div>
+            <!-- Energy Cost -->
+            <div class="space-y-2">
+              <label for="price" class="font-semibold text-sm uppercase tracking-wider text-slate-500 block" data-i18n="label-cost">Costo Energía</label>
+              <div class="relative">
+                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" id="currency-sym">$</span>
+                <input type="number" id="price" value="0.15" step="0.01" 
+                  class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl pl-8 pr-4 py-3 focus:ring-2 focus:ring-amber-500 outline-none transition-all" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Estimated System Cost (Input/Calculated) -->
+          <div class="pt-6 border-t border-slate-200 dark:border-slate-800">
+             <div class="flex justify-between items-center mb-4">
+               <label class="font-semibold text-sm uppercase tracking-wider text-slate-500" data-i18n="label-investment">Inversión Estimada</label>
+               <button id="toggle-manual-cost" class="text-xs text-amber-600 font-medium hover:underline" data-i18n="manual-cost">Ajustar manualmente</button>
+             </div>
+             <div class="relative">
+                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" id="cost-currency-sym">$</span>
+                <input type="number" id="sys-cost" value="0" readonly
+                  class="w-full bg-slate-100 dark:bg-slate-800/50 border border-transparent rounded-xl pl-8 pr-4 py-4 text-xl font-bold text-slate-700 dark:text-slate-200 outline-none transition-all" />
+                <p class="mt-2 text-xs text-slate-400 italic">Basado en un promedio de $1.20 USD por vatio instalado.</p>
+             </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESULTS PANEL -->
+      <div class="p-8 lg:p-12 flex flex-col justify-between">
+        <div class="space-y-8">
+          <div class="bg-amber-500/10 dark:bg-amber-500/5 p-8 rounded-3xl border border-amber-500/20">
+            <h3 class="text-amber-600 dark:text-amber-400 font-semibold text-sm uppercase tracking-[0.2em] mb-4" data-i18n="res-panels-label">Paneles Necesarios</h3>
+            <div class="flex items-baseline gap-2">
+              <span id="res-panels" class="text-7xl font-black text-slate-900 dark:text-white leading-none">0</span>
+              <span class="text-xl font-medium text-slate-500" data-i18n="res-modules">módulos</span>
+            </div>
+            <div id="res-kwp" class="mt-2 text-lg font-medium text-amber-600">0.00 kWp instalados</div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-6">
+            <div class="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
+              <div class="text-slate-500 text-sm font-medium mb-1" data-i18n="res-savings-label">Ahorro Anual</div>
+              <div id="res-savings" class="text-2xl font-bold text-emerald-600">$0</div>
+            </div>
+            <div class="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
+              <div class="text-slate-500 text-sm font-medium mb-1" data-i18n="res-roi-label">Retorno (ROI)</div>
+              <div id="res-roi" class="text-2xl font-bold text-blue-600">0 años</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8">
+          <button id="export-pdf" class="w-full flex items-center justify-center gap-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 py-4 rounded-2xl font-bold hover:scale-[1.02] transition-transform active:scale-[0.98] shadow-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span data-i18n="btn-pdf">Descargar Reporte PDF</span>
+          </button>
+        </div>
+
+        <div class="mt-12">
+          <h4 class="text-slate-400 font-bold text-xs uppercase tracking-widest mb-4" data-i18n="chart-title">Costo Acumulado (20 Años)</h4>
+          <div class="h-64 w-full relative">
+            <canvas id="roiChart" class="w-full h-full"></canvas>
+          </div>
+          <div class="mt-4 flex justify-center gap-6 text-[10px] font-bold uppercase tracking-wider">
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-[#E8A020]"></span> <span data-i18n="legend-sin">Sin Paneles</span></div>
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-[#1D9E75]"></span> <span data-i18n="legend-con">Con Paneles</span></div>
+          </div>
+          <p class="mt-6 text-[10px] text-slate-400 leading-relaxed uppercase tracking-tighter">
+            Fórmula: Paneles = (kWh_mensual * 12) / (HSP * 365 * Wp/1000 * 0.77). <br>
+            Factor de rendimiento (PR) de 0.77 estándar para pérdidas sistémicas.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<script is:inline src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  import { jsPDF } from 'jspdf';
+
+  const inputs = {
+    kwh: document.getElementById('kwh') as HTMLInputElement,
+    city: document.getElementById('city') as HTMLSelectElement,
+    wp: document.getElementById('wp') as HTMLSelectElement,
+    price: document.getElementById('price') as HTMLInputElement,
+    sysCost: document.getElementById('sys-cost') as HTMLInputElement
+  };
+
+  const displays = {
+    kwhVal: document.getElementById('kwh-val') as HTMLElement,
+    resPanels: document.getElementById('res-panels') as HTMLElement,
+    resKwp: document.getElementById('res-kwp') as HTMLElement,
+    resSavings: document.getElementById('res-savings') as HTMLElement,
+    resRoi: document.getElementById('res-roi') as HTMLElement,
+    currencySyms: [document.getElementById('currency-sym'), document.getElementById('cost-currency-sym')] as HTMLElement[],
+    sysCostInput: document.getElementById('sys-cost') as HTMLInputElement
+  };
+
+  let isManualCost = false;
+  let chart = null;
+
+  const SYMBOLS = { 'USD': '$', 'EUR': '€', 'MXN': '$', 'AUD': 'A$', 'BRL': 'R$', 'COP': '$', 'ARS': '$', 'INR': '₹' };
+
+  function update() {
+    const kwhMonth = parseFloat(inputs.kwh.value);
+    const hsp = parseFloat(inputs.city.value);
+    const wp = parseFloat(inputs.wp.value);
+    const energyPrice = parseFloat(inputs.price.value);
+    const annualBill = kwhMonth * 12 * energyPrice;
+    const currency = inputs.city.options[inputs.city.selectedIndex].dataset.currency as string;
+    const sym = SYMBOLS[currency as keyof typeof SYMBOLS] || '$';
+
+    displays.kwhVal.textContent = kwhMonth.toString();
+    displays.currencySyms.forEach(s => s.textContent = sym);
+
+    // Formula: Paneles = (kWh_mensual * 12) / (HSP * 365 * Wp/1000 * 0.77)
+    const PR = 0.77;
+    const kwhYear = kwhMonth * 12;
+    const wpKw = wp / 1000;
+    const panelsNeeded = kwhYear / (hsp * 365 * wpKw * PR);
+    const panels = Math.ceil(panelsNeeded);
+    const kwp = (panels * wpKw).toFixed(2);
+
+    // Estimated Savings
+    const annualProd = panels * wpKw * hsp * 365 * PR;
+    const annualSavings = annualProd * energyPrice;
+
+    // System Cost Estimation (if not manual)
+    // Using a base of $1.20 USD per Watt as a global average estimate
+    let totalCost = parseFloat(inputs.sysCost.value);
+    if (!isManualCost) {
+      totalCost = panels * wp * 1.20;
+      displays.sysCostInput.value = totalCost.toFixed(0);
+    }
+
+    // ROI
+    const roi = annualSavings > 0 ? (totalCost / annualSavings).toFixed(1) : '—';
+    const lang = document.documentElement.lang || 'en';
+    const yearsLabel = lang === 'es' ? 'años' : 'years';
+    const installedLabel = lang === 'es' ? 'instalados' : 'installed';
+
+    // Update displays
+    displays.resPanels.textContent = panels.toString();
+    displays.resKwp.textContent = `${kwp} kWp ${installedLabel}`;
+    displays.resSavings.textContent = `${sym}${Math.round(annualSavings).toLocaleString()}`;
+    displays.resRoi.textContent = `${roi} ${yearsLabel}`;
+
+    renderChart(totalCost, annualSavings, annualBill, sym);
+  }
+
+  function renderChart(cost: number, savings: number, annualBill: number, sym: string) {
+    const canvas = document.getElementById('roiChart') as HTMLCanvasElement;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    
+    const lang = document.documentElement.lang || 'en';
+    const yearLabel = lang === 'es' ? 'Año' : 'Year';
+    const labels = [1, 5, 10, 15, 20].map(y => `${yearLabel} ${y}`);
+    const intervals = [1, 5, 10, 15, 20];
+    
+    const costSin = intervals.map(y => y * annualBill);
+    const remainingBill = Math.max(0, annualBill - savings);
+    const costCon = intervals.map(y => cost + (y * remainingBill));
+
+    const chartGlobal = (window as any).Chart;
+    if (!chartGlobal) return;
+
+    if (chart) chart.destroy();
+
+    const sinLabel = lang === 'es' ? 'Costo Sin Paneles' : 'Cost Without Panels';
+    const conLabel = lang === 'es' ? 'Costo Con Paneles' : 'Cost With Panels';
+
+    chart = new chartGlobal(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: sinLabel,
+            data: costSin,
+            backgroundColor: '#E8A020',
+            borderRadius: 6
+          },
+          {
+            label: conLabel,
+            data: costCon,
+            backgroundColor: '#1D9E75',
+            borderRadius: 6
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            mode: 'index',
+            intersect: false,
+            callbacks: {
+              label: (ctx: any) => `${ctx.dataset.label}: ${sym}${Math.round(ctx.raw).toLocaleString()}`
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              font: { size: 10, weight: 'bold' },
+              callback: (val: any) => `${sym}${Math.round(val / 1000)}k`
+            },
+            grid: {
+              color: 'rgba(0,0,0,0.05)'
+            }
+          },
+          x: {
+            grid: {
+              display: false
+            },
+            ticks: {
+              font: { size: 10, weight: 'bold' }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  // Event Listeners
+  Object.values(inputs).forEach(input => {
+    input.addEventListener('input', update);
+  });
+
+  document.getElementById('toggle-manual-cost').addEventListener('click', () => {
+    isManualCost = !isManualCost;
+    const input = displays.sysCostInput;
+    if (isManualCost) {
+      input.removeAttribute('readonly');
+      input.classList.remove('bg-slate-100', 'dark:bg-slate-800/50', 'border-transparent');
+      input.classList.add('bg-white', 'dark:bg-slate-800', 'border-amber-500');
+      input.focus();
+    } else {
+      input.setAttribute('readonly', 'true');
+      input.classList.add('bg-slate-100', 'dark:bg-slate-800/50', 'border-transparent');
+      input.classList.remove('bg-white', 'dark:bg-slate-800', 'border-amber-500');
+      update();
+    }
+  });
+
+  document.getElementById('export-pdf')?.addEventListener('click', () => {
+    const doc = new jsPDF();
+    const kwhMonth = inputs.kwh.value;
+    const city = inputs.city.options[inputs.city.selectedIndex].text.split(' — ')[0];
+    const hsp = inputs.city.value;
+    const panels = displays.resPanels.textContent;
+    const kwp = displays.resKwp.textContent;
+    const savings = displays.resSavings.textContent;
+    const roi = displays.resRoi.textContent;
+    const currency = inputs.city.options[inputs.city.selectedIndex].dataset.currency;
+    const cost = displays.sysCostInput.value;
+    const sym = SYMBOLS[currency as keyof typeof SYMBOLS] || '$';
+
+    // Header
+    doc.setFillColor(15, 23, 42); // slate-900
+    doc.rect(0, 0, 210, 40, 'F');
+    
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(24);
+    doc.setFont('helvetica', 'bold');
+    doc.text('WattLogic', 20, 25);
+    
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.text('Reporte de Viabilidad Solar', 150, 25);
+
+    // Summary Section
+    doc.setTextColor(15, 23, 42);
+    doc.setFontSize(18);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Resumen del Proyecto', 20, 60);
+
+    doc.setDrawColor(226, 232, 240); // slate-200
+    doc.line(20, 65, 190, 65);
+
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'normal');
+    
+    const rows = [
+      ['Ubicación', city],
+      ['Horas de Sol Pico (HSP)', `${hsp} h/día`],
+      ['Consumo Mensual', `${kwhMonth} kWh`],
+      ['Paneles Requeridos', `${panels} módulos`],
+      ['Potencia Instalada', kwp || ''],
+      ['Inversión Estimada', `${sym}${cost}`],
+      ['Ahorro Anual Estimado', savings || ''],
+      ['Retorno de Inversión (ROI)', roi || '']
+    ];
+
+    let y = 80;
+    rows.forEach(([label, value]) => {
+      doc.setFont('helvetica', 'bold');
+      doc.text(label + ':', 20, y);
+      doc.setFont('helvetica', 'normal');
+      doc.text(value, 100, y);
+      y += 10;
+    });
+
+    // Disclaimer
+    doc.setFontSize(9);
+    doc.setTextColor(100, 116, 139); // slate-500
+    const disclaimer = [
+      'Descargo de Responsabilidad:',
+      'Este reporte es una estimación basada en promedios históricos y estándares industriales. El rendimiento real',
+      'puede variar según la inclinación, orientación, sombras locales y eficiencia específica de los equipos instalados.',
+      'WattLogic no se hace responsable de variaciones en el ahorro real. Se recomienda una auditoría profesional.'
+    ];
+    
+    y += 10;
+    disclaimer.forEach(line => {
+      doc.text(line, 20, y);
+      y += 5;
+    });
+
+    // Footer
+    doc.setFontSize(8);
+    doc.text(`Generado el ${new Date().toLocaleDateString()} | wattlogic.io`, 105, 285, { align: 'center' });
+
+    doc.save(`WattLogic_Reporte_Solar_${city.replace(/\s+/g, '_')}.pdf`);
+  });
+
+  // Expose for layout compatibility
+  (window as any).wlSetLang = (newLang: string) => {
+    update();
+  };
+
+  window.addEventListener('wl-lang-changed', (e: any) => {
+    update();
+  });
+
+  // Init
+  update();
+</script>
+
+<style>
+  /* Custom slider styling for non-Tailwind browsers or specific overrides */
+  input[type='range']::-webkit-slider-thumb {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #f59e0b;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 4px solid white;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  }
+</style>

@@ -1,0 +1,26 @@
+{
+  "name": "wattlogic",
+  "version": "1.0.0",
+  "description": "WattLogic.io — Solar ROI & Smart Energy Calculator. Static SPA.",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.9",
+    "@astrojs/tailwind": "^5.0.0",
+    "astro": "^4.0.0",
+    "jspdf": "^4.2.1",
+    "tailwindcss": "^3.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
