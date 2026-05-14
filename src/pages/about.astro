@@ -1,0 +1,95 @@
+---
+// src/pages/about.astro — About WattLogic
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Sobre WattLogic: Por qué creé esta herramienta | Energía Solar"
+  description="La historia detrás de WattLogic. Una herramienta creada por desarrolladores para simplificar los cálculos solares sin registros ni complicaciones."
+>
+  <article class="max-w-3xl mx-auto px-6 py-16 font-sans text-slate-800">
+    
+    <header class="mb-16">
+      <h1 class="text-4xl md:text-6xl font-extrabold text-slate-900 leading-tight mb-8">
+        Hice esto porque los cálculos solares suelen ser un caos de Excels.
+      </h1>
+      <p class="text-xl text-slate-500 leading-relaxed italic border-l-4 border-amber-500 pl-6">
+        No somos una gran corporación de energía. Somos gente que sabe programar y que se cansó de ver presupuestos solares inflados y fórmulas imposibles de entender.
+      </p>
+    </header>
+
+    <div class="prose prose-lg max-w-none text-slate-700 leading-relaxed space-y-10">
+      
+      <section>
+        <h2 class="text-3xl font-bold text-slate-900 mb-6">La historia real</h2>
+        <p>
+          Todo empezó cuando intenté calcular cuántos paneles necesitaba para mi propia casa. Me encontré con dos opciones: o le daba mis datos personales a una empresa para que me llamaran tres comerciales al día siguiente, o me sumergía en hojas de cálculo llenas de siglas raras como HSP, PR y Wp.
+        </p>
+        <p>
+          La mayoría de las herramientas online están diseñadas para captar tu "lead" (tu contacto), no para ayudarte. Te dan un número rápido, te piden el email y luego te bombardean. WattLogic nació con una idea distinta: <strong>herramientas primero, marketing después.</strong>
+        </p>
+      </section>
+
+      <section class="bg-slate-50 rounded-3xl p-8 md:p-10 border border-slate-100">
+        <h2 class="text-3xl font-bold text-slate-900 mb-8">Por qué somos diferentes</h2>
+        <div class="grid gap-8">
+          <div class="flex gap-4">
+            <div class="w-12 h-12 bg-amber-500/10 rounded-xl flex items-center justify-center shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+            </div>
+            <div>
+              <h3 class="font-bold text-xl text-slate-900 mb-2">100% Privado</h3>
+              <p class="text-slate-500 text-base">No guardamos tus cálculos en ninguna base de datos. Lo que escribes en la calculadora se queda en tu navegador. Sin cuentas, sin contraseñas, sin spam.</p>
+            </div>
+          </div>
+
+          <div class="flex gap-4">
+            <div class="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <div>
+              <h3 class="font-bold text-xl text-slate-900 mb-2">Velocidad Extrema</h3>
+              <p class="text-slate-500 text-base">WattLogic es una aplicación estática. No tiene que consultar a un servidor cada vez que mueves un deslizador. Los resultados son instantáneos porque el código corre en tu propio equipo.</p>
+            </div>
+          </div>
+
+          <div class="flex gap-4">
+            <div class="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div>
+              <h3 class="font-bold text-xl text-slate-900 mb-2">Fórmulas Transparentes</h3>
+              <p class="text-slate-500 text-base">Usamos estándares de la industria (HSP y un Performance Ratio de 0.77). No inflamos los ahorros para que el sistema parezca más atractivo de lo que es.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <p>
+          Nuestro objetivo es que cuando hables con un instalador solar, lo hagas con los números ya aprendidos. Que sepas exactamente cuántos paneles necesitas y si la oferta que te están haciendo tiene sentido o si están intentando venderte un portaaviones cuando solo necesitas una lancha.
+        </p>
+        <p>
+          Si te ha servido la herramienta, con que la compartas con alguien que esté pensando en pasarse al autoconsumo, ya nos damos por pagados.
+        </p>
+      </section>
+
+      <div class="pt-12 text-center">
+        <a href="/" class="inline-flex items-center justify-center px-10 py-5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-2xl transition-all hover:scale-105 active:scale-95 shadow-xl group">
+          Volver a la calculadora
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+          </svg>
+        </a>
+      </div>
+
+    </div>
+
+  </article>
+</BaseLayout>
