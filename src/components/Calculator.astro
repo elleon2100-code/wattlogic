@@ -101,8 +101,30 @@ const countryNames: Record<string, string> = {
                 <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" id="cost-currency-sym">$</span>
                 <input type="number" id="sys-cost" value="0" readonly
                   class="w-full bg-slate-100 dark:bg-slate-800/50 border border-transparent rounded-xl pl-8 pr-4 py-4 text-xl font-bold text-slate-700 dark:text-slate-200 outline-none transition-all" />
-                <p class="mt-2 text-xs text-slate-400 italic">Basado en un promedio de $1.20 USD por vatio instalado.</p>
+                <p class="mt-2 text-[10px] text-slate-400 italic">Basado en un promedio de $1.20 USD por vatio instalado.</p>
              </div>
+          </div>
+
+          <!-- Battery Storage Section -->
+          <div class="pt-6 border-t border-slate-200 dark:border-slate-800 space-y-4">
+            <div class="flex items-center justify-between">
+              <label for="has-battery" class="font-semibold text-sm uppercase tracking-wider text-slate-500" data-i18n="label-battery">¿Añadir Baterías?</label>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="has-battery" class="sr-only peer">
+                <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-slate-600 peer-checked:bg-amber-500"></div>
+              </label>
+            </div>
+
+            <div id="battery-options" class="hidden space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
+              <div class="space-y-2">
+                <label class="text-xs font-bold text-slate-400 uppercase" data-i18n="label-coverage">Cobertura Nocturna</label>
+                <div class="grid grid-cols-2 gap-2">
+                  <button type="button" data-coverage="0.5" class="battery-opt active bg-amber-500 text-white py-2 rounded-xl text-sm font-bold transition-all">50%</button>
+                  <button type="button" data-coverage="1.0" class="battery-opt bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-2 rounded-xl text-sm font-bold transition-all">100%</button>
+                </div>
+              </div>
+              <p class="text-[10px] text-slate-400 italic leading-snug" data-i18n="battery-practical">Ideal para sistemas híbridos u Off-Grid. Las baterías aumentan la inversión pero te dan independencia.</p>
+            </div>
           </div>
         </div>
       </div>
@@ -125,8 +147,40 @@ const countryNames: Record<string, string> = {
               <div id="res-savings" class="text-2xl font-bold text-emerald-600">$0</div>
             </div>
             <div class="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
-              <div class="text-slate-500 text-sm font-medium mb-1" data-i18n="res-roi-label">Retorno (ROI)</div>
+              <div id="roi-label-container" class="text-slate-500 text-sm font-medium mb-1" data-i18n="res-roi-label">Retorno (ROI)</div>
               <div id="res-roi" class="text-2xl font-bold text-blue-600">0 años</div>
+            </div>
+          </div>
+
+        <div id="res-battery-card" class="hidden p-6 rounded-2xl bg-blue-500/10 border border-blue-500/20 animate-in zoom-in-95 duration-300">
+             <div class="text-blue-600 dark:text-blue-400 text-sm font-bold uppercase tracking-widest mb-1" data-i18n="res-battery-cap">Capacidad Batería</div>
+             <div class="flex items-baseline gap-2">
+               <span id="res-battery-val" class="text-3xl font-black text-slate-900 dark:text-white">0</span>
+               <span class="text-lg font-bold text-blue-600">kWh</span>
+             </div>
+          </div>
+
+          <!-- Environmental Impact Widget -->
+          <div class="p-6 rounded-3xl bg-emerald-500/5 border border-emerald-500/10">
+            <h4 class="text-emerald-700 dark:text-emerald-400 font-bold text-xs uppercase tracking-widest mb-4 flex items-center gap-2">
+              <span class="text-base">✨</span> <span data-i18n="impact-title">Tu impacto positivo en el planeta</span>
+            </h4>
+            <div class="grid grid-cols-3 gap-2 text-center">
+              <div class="p-3 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800">
+                <div class="text-xl mb-1">🌳</div>
+                <div id="impact-trees" class="text-lg font-black text-slate-900 dark:text-white">0</div>
+                <div class="text-[8px] text-slate-400 uppercase font-bold leading-tight" data-i18n="impact-trees">Árboles plantados</div>
+              </div>
+              <div class="p-3 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800">
+                <div class="text-xl mb-1">🌍</div>
+                <div id="impact-co2" class="text-lg font-black text-slate-900 dark:text-white">0</div>
+                <div class="text-[8px] text-slate-400 uppercase font-bold leading-tight" data-i18n="impact-co2">CO2 evitado (kg)</div>
+              </div>
+              <div class="p-3 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800">
+                <div class="text-xl mb-1">🚗</div>
+                <div id="impact-km" class="text-lg font-black text-slate-900 dark:text-white">0</div>
+                <div class="text-[8px] text-slate-400 uppercase font-bold leading-tight" data-i18n="impact-km">Km no conducidos</div>
+              </div>
             </div>
           </div>
         </div>
@@ -168,8 +222,11 @@ const countryNames: Record<string, string> = {
     city: document.getElementById('city') as HTMLSelectElement,
     wp: document.getElementById('wp') as HTMLSelectElement,
     price: document.getElementById('price') as HTMLInputElement,
-    sysCost: document.getElementById('sys-cost') as HTMLInputElement
+    sysCost: document.getElementById('sys-cost') as HTMLInputElement,
+    hasBattery: document.getElementById('has-battery') as HTMLInputElement
   };
+
+  let currentCoverage = 0.5;
 
   const displays = {
     kwhVal: document.getElementById('kwh-val') as HTMLElement,
@@ -177,6 +234,12 @@ const countryNames: Record<string, string> = {
     resKwp: document.getElementById('res-kwp') as HTMLElement,
     resSavings: document.getElementById('res-savings') as HTMLElement,
     resRoi: document.getElementById('res-roi') as HTMLElement,
+    resBatteryVal: document.getElementById('res-battery-val') as HTMLElement,
+    resBatteryCard: document.getElementById('res-battery-card') as HTMLElement,
+    impactTrees: document.getElementById('impact-trees') as HTMLElement,
+    impactCo2: document.getElementById('impact-co2') as HTMLElement,
+    impactKm: document.getElementById('impact-km') as HTMLElement,
+    batteryOptions: document.getElementById('battery-options') as HTMLElement,
     currencySyms: [document.getElementById('currency-sym'), document.getElementById('cost-currency-sym')] as HTMLElement[],
     sysCostInput: document.getElementById('sys-cost') as HTMLInputElement
   };
@@ -213,9 +276,33 @@ const countryNames: Record<string, string> = {
     // System Cost Estimation (if not manual)
     // Using a base of $1.20 USD per Watt as a global average estimate
     let totalCost = parseFloat(inputs.sysCost.value);
-    if (!isManualCost) {
-      totalCost = panels * wp * 1.20;
-      displays.sysCostInput.value = totalCost.toFixed(0);
+    
+    // Battery calculation
+    const hasBattery = inputs.hasBattery.checked;
+    let batteryKwh = 0;
+    if (hasBattery) {
+      // Nightly consumption estimate: 50% of daily total
+      const dailyKwh = kwhMonth / 30;
+      const nightlyKwh = dailyKwh * 0.5;
+      // DoD: 90% (LFP standard)
+      batteryKwh = (nightlyKwh * currentCoverage) / 0.9;
+      
+      displays.batteryOptions.classList.remove('hidden');
+      displays.resBatteryCard.classList.remove('hidden');
+      displays.resBatteryVal.textContent = batteryKwh.toFixed(1);
+      
+      // Cost impact: approx $500 per kWh
+      if (!isManualCost) {
+        totalCost = (panels * wp * 1.20) + (batteryKwh * 500);
+        displays.sysCostInput.value = totalCost.toFixed(0);
+      }
+    } else {
+      displays.batteryOptions.classList.add('hidden');
+      displays.resBatteryCard.classList.add('hidden');
+      if (!isManualCost) {
+        totalCost = panels * wp * 1.20;
+        displays.sysCostInput.value = totalCost.toFixed(0);
+      }
     }
 
     // ROI
@@ -229,6 +316,17 @@ const countryNames: Record<string, string> = {
     displays.resKwp.textContent = `${kwp} kWp ${installedLabel}`;
     displays.resSavings.textContent = `${sym}${Math.round(annualSavings).toLocaleString()}`;
     displays.resRoi.textContent = `${roi} ${yearsLabel}`;
+
+    // Update Environmental Impact
+    // Factors: 0.4 kg CO2 / kWh, 20 kg CO2 / tree, 0.12 kg CO2 / km
+    const annualKwh = annualProd;
+    const co2 = annualKwh * 0.4;
+    const trees = co2 / 20;
+    const km = co2 / 0.12;
+
+    displays.impactCo2.textContent = Math.round(co2).toLocaleString();
+    displays.impactTrees.textContent = Math.round(trees).toString();
+    displays.impactKm.textContent = Math.round(km).toLocaleString();
 
     renderChart(totalCost, annualSavings, annualBill, sym);
   }
@@ -317,6 +415,23 @@ const countryNames: Record<string, string> = {
     input.addEventListener('input', update);
   });
 
+  document.querySelectorAll('.battery-opt').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const target = e.currentTarget as HTMLButtonElement;
+      currentCoverage = parseFloat(target.dataset.coverage || '0.5');
+      
+      document.querySelectorAll('.battery-opt').forEach(b => {
+        b.classList.remove('active', 'bg-amber-500', 'text-white');
+        b.classList.add('bg-white', 'dark:bg-slate-800', 'border', 'border-slate-200', 'dark:border-slate-700');
+      });
+      
+      target.classList.add('active', 'bg-amber-500', 'text-white');
+      target.classList.remove('bg-white', 'dark:bg-slate-800', 'border', 'border-slate-200', 'dark:border-slate-700');
+      
+      update();
+    });
+  });
+
   document.getElementById('toggle-manual-cost').addEventListener('click', () => {
     isManualCost = !isManualCost;
     const input = displays.sysCostInput;
@@ -377,6 +492,7 @@ const countryNames: Record<string, string> = {
       ['Consumo Mensual', `${kwhMonth} kWh`],
       ['Paneles Requeridos', `${panels} módulos`],
       ['Potencia Instalada', kwp || ''],
+      ['Batería Requerida', inputs.hasBattery.checked ? `${displays.resBatteryVal.textContent} kWh` : 'No incluida'],
       ['Inversión Estimada', `${sym}${cost}`],
       ['Ahorro Anual Estimado', savings || ''],
       ['Retorno de Inversión (ROI)', roi || '']
@@ -413,11 +529,6 @@ const countryNames: Record<string, string> = {
 
     doc.save(`WattLogic_Reporte_Solar_${city.replace(/\s+/g, '_')}.pdf`);
   });
-
-  // Expose for layout compatibility
-  (window as any).wlSetLang = (newLang: string) => {
-    update();
-  };
 
   window.addEventListener('wl-lang-changed', (e: any) => {
     update();

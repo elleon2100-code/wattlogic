@@ -47,16 +47,16 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://wattlogic.i
   <meta name="twitter:image"       content={ogImage} />
 
   <!-- ── Hreflang (i18n) ─────────────────────────────────── -->
-  <link rel="alternate" hreflang="en" href="https://wattlogic.io/en/" />
-  <link rel="alternate" hreflang="es" href="https://wattlogic.io/es/" />
-  <link rel="alternate" hreflang="x-default" href="https://wattlogic.io/" />
+  <link rel="alternate" hreflang="en" href="https://wattlogic.site/en/" />
+  <link rel="alternate" hreflang="es" href="https://wattlogic.site/es/" />
+  <link rel="alternate" hreflang="x-default" href="https://wattlogic.site/" />
 
   <!-- ── Structured Data (JSON-LD) ───────────────────────── -->
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "WattLogic Solar ROI Calculator",
-    "url": "https://wattlogic.io",
+    "url": "https://wattlogic.site",
     "description": description,
     "applicationCategory": "UtilitiesApplication",
     "operatingSystem": "Any",
@@ -137,7 +137,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://wattlogic.i
   <footer class="wl-footer">
     <div class="container">
       <p class="footer-copy">
-        &copy; {new Date().getFullYear()} WattLogic.io —
+        &copy; {new Date().getFullYear()} WattLogic.site —
         <span data-i18n="footer-copy">Free solar tools, no registration required.</span>
       </p>
       <nav aria-label="Footer links" class="footer-links">
@@ -149,6 +149,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://wattlogic.i
   </footer>
 
   <script is:inline>
+    const TRANSLATIONS = {
       es: {
         'nav-calc': 'Calculadora',
         'nav-inverters': 'Inversores',
@@ -181,7 +182,15 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://wattlogic.i
         'chart-title': 'Costo Acumulado (20 Años)',
         'legend-sin': 'Sin Paneles',
         'legend-con': 'Con Paneles',
-        'manual-cost': 'Ajustar manualmente'
+        'manual-cost': 'Ajustar manualmente',
+        'label-battery': '¿Añadir Baterías?',
+        'label-coverage': 'Cobertura Nocturna',
+        'res-battery-cap': 'Capacidad Batería',
+        'battery-practical': 'Ideal para sistemas híbridos u Off-Grid. Las baterías aumentan la inversión pero te dan independencia.',
+        'impact-title': 'Tu impacto positivo en el planeta',
+        'impact-trees': 'Árboles plantados',
+        'impact-co2': 'CO2 evitado',
+        'impact-km': 'Km no conducidos'
       },
       en: {
         'nav-calc': 'Calculator',
@@ -215,7 +224,15 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://wattlogic.i
         'chart-title': 'Cumulative Cost (20 Years)',
         'legend-sin': 'Without Panels',
         'legend-con': 'With Panels',
-        'manual-cost': 'Adjust manually'
+        'manual-cost': 'Adjust manually',
+        'label-battery': 'Add Battery Storage?',
+        'label-coverage': 'Nightly Coverage',
+        'res-battery-cap': 'Battery Capacity',
+        'battery-practical': 'Ideal for Hybrid or Off-Grid systems. Batteries increase investment but provide independence.',
+        'impact-title': 'Your positive impact on the planet',
+        'impact-trees': 'Trees planted',
+        'impact-co2': 'CO2 avoided',
+        'impact-km': 'Km not driven'
       }
     };
 

@@ -1,0 +1,82 @@
+---
+// src/components/InstallationChecklist.astro
+---
+
+<section class="py-20 bg-slate-50 dark:bg-slate-950" aria-labelledby="checklist-heading">
+  <div class="container max-w-4xl mx-auto px-6">
+    <header class="text-center mb-16">
+      <h2 id="checklist-heading" class="text-3xl md:text-4xl font-black text-slate-900 dark:text-white mb-4">
+        Guía de Supervivencia: 5 preguntas que tu instalador no quiere que hagas
+      </h2>
+      <p class="text-lg text-slate-500 dark:text-slate-400 max-w-2xl mx-auto">
+        No dejes que te vendan espejitos de colores. Si vas a invertir miles de dólares, asegúrate de tener estas respuestas por escrito antes de firmar nada.
+      </p>
+    </header>
+
+    <div class="space-y-8">
+      <!-- Pregunta 1 -->
+      <article class="bg-white dark:bg-slate-900 p-8 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-800 hover:shadow-md transition-shadow">
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3 flex items-center gap-3">
+          <span class="flex-shrink-0 w-8 h-8 bg-amber-500 text-white rounded-full flex items-center justify-center text-sm">1</span>
+          ¿Quién va a estar exactamente subido en mi tejado?
+        </h3>
+        <p class="text-slate-600 dark:text-slate-400 leading-relaxed">
+          Muchas empresas venden el proyecto y luego subcontratan a cuadrillas externas que cobran por panel instalado. <span class="text-amber-600 font-semibold italic">El consejo del insider:</span> Exige saber si los instaladores son empleados directos y si cuentan con certificaciones específicas del fabricante (como Enphase o SolarEdge). La subcontratación es la causa #1 de instalaciones chapuceras.
+        </p>
+      </article>
+
+      <!-- Pregunta 2 -->
+      <article class="bg-white dark:bg-slate-900 p-8 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-800 hover:shadow-md transition-shadow">
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3 flex items-center gap-3">
+          <span class="flex-shrink-0 w-8 h-8 bg-amber-500 text-white rounded-full flex items-center justify-center text-sm">2</span>
+          ¿Tu garantía cubre la mano de obra o solo el equipo?
+        </h3>
+        <p class="text-slate-600 dark:text-slate-400 leading-relaxed">
+          Es fácil decir "garantía de 25 años", pero casi siempre se refieren solo al panel. Si el inversor falla a los 3 años, el fabricante te envía uno nuevo gratis, ¿pero quién paga los $200 de la visita del técnico? <span class="text-amber-600 font-semibold italic">El consejo del insider:</span> Busca una garantía de "mano de obra" (workmanship) de al menos 10 años.
+        </p>
+      </article>
+
+      <!-- Pregunta 3 -->
+      <article class="bg-white dark:bg-slate-900 p-8 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-800 hover:shadow-md transition-shadow">
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3 flex items-center gap-3">
+          <span class="flex-shrink-0 w-8 h-8 bg-amber-500 text-white rounded-full flex items-center justify-center text-sm">3</span>
+          ¿Cómo vas a garantizar que mi tejado no tendrá goteras?
+        </h3>
+        <p class="text-slate-600 dark:text-slate-400 leading-relaxed">
+          Perforar el tejado es delicado. Algunos instaladores usan selladores baratos que se agrietan con el sol en 2 años. <span class="text-amber-600 font-semibold italic">El consejo del insider:</span> Pregunta qué sistema de anclaje usan (flashing). Si te dicen que solo usan "sellador de silicona", diles adiós. Un sistema profesional usa placas metálicas que se meten debajo de las tejas.
+        </p>
+      </article>
+
+      <!-- Pregunta 4 -->
+      <article class="bg-white dark:bg-slate-900 p-8 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-800 hover:shadow-md transition-shadow">
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3 flex items-center gap-3">
+          <span class="flex-shrink-0 w-8 h-8 bg-amber-500 text-white rounded-full flex items-center justify-center text-sm">4</span>
+          ¿Tendré monitoreo a nivel de panel o solo global?
+        </h3>
+        <p class="text-slate-600 dark:text-slate-400 leading-relaxed">
+          Si un panel falla en un sistema global, podrías tardar meses en darte cuenta de que tu ahorro ha bajado un 10%. <span class="text-amber-600 font-semibold italic">El consejo del insider:</span> Insiste en microinversores u optimizadores que te permitan ver desde el móvil el rendimiento de CADA panel individualmente. Es la única forma de reclamar una garantía de rendimiento con pruebas.
+        </p>
+      </article>
+
+      <!-- Pregunta 5 -->
+      <article class="bg-white dark:bg-slate-900 p-8 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-800 hover:shadow-md transition-shadow">
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3 flex items-center gap-3">
+          <span class="flex-shrink-0 w-8 h-8 bg-amber-500 text-white rounded-full flex items-center justify-center text-sm">5</span>
+          ¿El precio incluye permisos y gestión con la red eléctrica?
+        </h3>
+        <p class="text-slate-600 dark:text-slate-400 leading-relaxed">
+          Algunos presupuestos "baratos" esconden sorpresas. La burocracia con el ayuntamiento y la eléctrica puede costar cientos de dólares y meses de papeleo. <span class="text-amber-600 font-semibold italic">El consejo del insider:</span> Asegúrate de que el contrato sea "llave en mano". Si no incluye la legalización y el cambio de contador, el presupuesto no está completo.
+        </p>
+      </article>
+    </div>
+
+    <footer class="mt-16 p-8 bg-amber-500/10 border border-amber-500/20 rounded-3xl text-center">
+      <p class="text-slate-700 dark:text-slate-300 font-medium">
+        ¿Aún no sabes cuánto debería costar tu sistema? No adivines.
+      </p>
+      <a href="#solar-calculator" class="inline-block mt-4 text-amber-600 font-bold hover:underline">
+        Usa nuestra calculadora para obtener un precio de referencia →
+      </a>
+    </footer>
+  </div>
+</section>
